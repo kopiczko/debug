@@ -7,7 +7,7 @@ name: Docker
 
 on:
   push:
-    branches: [ main, add-actions ]
+    branches: [ main ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
@@ -17,7 +17,6 @@ env:
   REGISTRY: "docker.io"
   USER: "kopiczko"
   IMAGE_NAME: "${{ github.repository }}"
-
 
 jobs:
   build:
