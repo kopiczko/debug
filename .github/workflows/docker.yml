@@ -1,0 +1,41 @@
+name: Docker
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ main, add-actions ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: "docker.io"
+  USER: "kopiczko"
+  IMAGE_NAME: "${{ github.repository }}"
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Login to the docker registry
+        run: docker login -u ${{ env.USER }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+        
+      - name: Build the image
+        run: docker build -t ${{ env.IMAGE_NAME }}:latest .
+        
+      - name: Push the image
+        run: docker push ${{ env.IMAGE_NAME }}:latest
